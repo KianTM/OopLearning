@@ -14,10 +14,19 @@ namespace OopLearning.BL
         {
             Name = name;
             Cpr = cpr;
-            IsWoman = isWoman;
         }
 
-        public string Name { get => name; set => name = value; }
+        public string Name {
+            get => name;
+            set
+            {
+                (bool isValid, string errMsg) = ValidateName(value);
+                if (isValid)
+                    name = value;
+                else
+                    throw new ArgumentException(errMsg, nameof(Name));
+            }
+        }
         public DateTime Birthday
         {
             get
@@ -35,8 +44,29 @@ namespace OopLearning.BL
                     throw new InvalidOperationException("Could not convert CPR to valid DateTime");
             }
         }
-        public string Cpr { get => cpr; set => cpr = value; }
-        public bool IsWoman { get => isWoman; set => isWoman = value; }
+        public string Cpr
+        {
+            get => cpr;
+            set
+            {
+                (bool isValid, string errMsg) = ValidateCpr(value);
+                if (isValid)
+                    cpr = value;
+                else
+                    throw new ArgumentException(errMsg, nameof(Cpr));
+            }
+        }
+        public bool IsWoman
+        {
+            get
+            {
+                int.TryParse(cpr.Remove(0, 6), out int shortenedCpr);
+
+                if (shortenedCpr % 2 == 0)
+                    return true;
+                return false;
+            }
+        }
 
         public (bool isValid, string errorMsg) ValidateName(string name)
         {
@@ -54,6 +84,47 @@ namespace OopLearning.BL
                 return (false, "Name must contain at least one space");
 
             return (true, "");
+        }
+
+        public (bool isValid, string errMsg) ValidateCpr(string cpr)
+        {
+            if (cpr is null)
+                return (false, "CPR is null");
+
+            if (cpr.Length != 10 && ValidateDigits(cpr))
+                return (false, "CPR must be 10 characters");
+
+            if (!ValidateCprDate(cpr))
+                return (false, "CPR is not a valid date or is in the future");
+
+            return (true, "");
+        }
+
+        private bool ValidateDigits(string cpr)
+        {
+            foreach (char c in cpr)
+            {
+                if (!char.IsDigit(c))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool ValidateCprDate(string cpr)
+        {
+            string shortenedCpr = cpr.Remove(6);
+
+            string dateFormattedCpr = shortenedCpr.Insert(2, "-");
+            dateFormattedCpr = dateFormattedCpr.Insert(5, "-");
+
+            bool validateConversion = DateTime.TryParse(dateFormattedCpr, out DateTime dateFromCpr);
+
+            if (dateFromCpr > DateTime.Today)
+                return false;
+
+            return validateConversion;
         }
     }
 }
