@@ -13,10 +13,28 @@ namespace OopLearning.BL
         public string AccountNumber { get => accountNumber; set => accountNumber = value; }
         public string DepartmentNumber { get => departmentNumber; set => departmentNumber = value; }
         public decimal Balance { get => balance; set => balance = value; }
-    }
 
-    public (bool isValid, string errMsg) ValidateAccountNumber(string accountNumber)
-    {
+        private (bool isValid, string errMsg) ValidateAccountNumber(string accountNumber)
+        {
+            if (accountNumber is null)
+                return (false, "Account number is null");
 
+            if (accountNumber.Length == 10 && ValidateDigits(accountNumber))
+                return (false, "Account number must be 10 characters");
+
+            return (true, "");
+        }
+
+        private bool ValidateDigits(string input)
+        {
+            foreach (char c in input)
+            {
+                if (!char.IsDigit(c))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }

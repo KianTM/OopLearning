@@ -10,7 +10,7 @@ namespace OopLearning.BL
         private string cpr;
         private bool isWoman;
 
-        public Person(string name, string cpr, bool isWoman)
+        public Person(string name, string cpr)
         {
             Name = name;
             Cpr = cpr;
