@@ -21,7 +21,7 @@ namespace OopLearning.BL.Inheritance
         public int FileSize { get => fileSize; set => fileSize = value; }
         public DateTime CreationTime { get => creationTime; set => creationTime = value; }
 
-        public bool IsSizeTooLarge()
+        public virtual bool IsSizeTooLarge()
         {
             if (FileSize > 45)
                 return true;
