@@ -4,12 +4,12 @@ using System.Text;
 
 namespace OopLearning.BL.Inheritance
 {
-    class ImageFileInfo : CustomFileInfo
+    public class ImageFileInfo : CustomFileInfo
     {
         protected int width;
         protected int height;
 
-        public ImageFileInfo(string fileName, int fileSize, DateTime creationTime) : base(fileName, fileSize, creationTime)
+        public ImageFileInfo(int width, int height, string fileName, int fileSize, DateTime creationTime) : base(fileName, fileSize, creationTime)
         {
             Width = width;
             Height = height;
